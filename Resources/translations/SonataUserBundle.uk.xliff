@@ -1,6 +1,6 @@
-<?xml version="1.0"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" datatype="plaintext" original="" >
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" datatype="plaintext" original="">
         <body>
             <trans-unit id="title_user_registration">
                 <source>title_user_registration</source>
@@ -57,6 +57,22 @@
             <trans-unit id="groups">
                 <source>groups</source>
                 <target>Групи</target>
+            </trans-unit>
+            <trans-unit id="group_user">
+                <source>User</source>
+                <target>Користувач</target>
+            </trans-unit>
+            <trans-unit id="group_status">
+                <source>Status</source>
+                <target>Статус</target>
+            </trans-unit>
+            <trans-unit id="group_roles">
+                <source>Roles</source>
+                <target>Ролі</target>
+            </trans-unit>
+            <trans-unit id="group_keys">
+                <source>Keys</source>
+                <target>Ключі</target>
             </trans-unit>
             <trans-unit id="switch_user_exit">
                 <source>switch_user_exit</source>

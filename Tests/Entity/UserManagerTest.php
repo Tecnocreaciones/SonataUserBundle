@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -13,43 +13,28 @@ namespace Sonata\UserBundle\Tests\Entity;
 
 use Sonata\CoreBundle\Test\EntityManagerMockFactory;
 use Sonata\UserBundle\Entity\UserManager;
+use Sonata\UserBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-/**
- * Class UserManagerTest.
- */
-class UserManagerTest extends \PHPUnit_Framework_TestCase
+class UserManagerTest extends PHPUnit_Framework_TestCase
 {
-    protected function getUserManager($qbCallback)
-    {
-        $em = EntityManagerMockFactory::create($this, $qbCallback, array(
-            'username',
-            'email',
-        ));
-
-        $encoder       = $this->getMock('Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface');
-        $canonicalizer = $this->getMock('FOS\UserBundle\Util\CanonicalizerInterface');
-
-        return new UserManager($encoder, $canonicalizer, $canonicalizer, $em, 'Sonata\UserBundle\Entity\BaseUser');
-    }
-
     public function testGetPager()
     {
         $self = $this;
         $this
             ->getUserManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('u')));
                 $qb->expects($self->never())->method('andWhere');
                 $qb->expects($self->once())->method('orderBy')->with(
                     $self->equalTo('u.username'),
                     $self->equalTo('ASC')
                 );
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array()));
             })
             ->getPager(array(), 1);
     }
 
     /**
-     * @expectedException        RuntimeException
-     * @expectedExceptionMessage Invalid sort field 'invalid' in 'className' class
+     * @expectedException        \RuntimeException
+     * @expectedExceptionMessage Invalid sort field 'invalid' in 'Sonata\UserBundle\Entity\BaseUser' class
      */
     public function testGetPagerWithInvalidSort()
     {
@@ -63,17 +48,40 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
             ->getPager(array(), 1, 10, array('invalid' => 'ASC'));
     }
 
+    public function testGetPagerWithValidSortDesc()
+    {
+        $self = $this;
+        $this
+            ->getUserManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('u')));
+                $qb->expects($self->once())->method('andWhere')->with($self->equalTo('u.enabled = :enabled'));
+                $qb->expects($self->once())->method('setParameter')->with(
+                    $self->equalTo('enabled'),
+                    $self->equalTo(true)
+                );
+                $qb->expects($self->once())->method('orderBy')->with(
+                    $self->equalTo('u.email'),
+                    $self->equalTo('DESC')
+                );
+            })
+            ->getPager(array('enabled' => true), 1, 10, array('email' => 'DESC'));
+    }
+
     public function testGetPagerWithEnabledUsers()
     {
         $self = $this;
         $this
             ->getUserManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('u')));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('u.enabled = :enabled'));
+                $qb->expects($self->once())->method('setParameter')->with(
+                    $self->equalTo('enabled'),
+                    $self->equalTo(true)
+                );
                 $qb->expects($self->once())->method('orderBy')->with(
                     $self->equalTo('u.username'),
                     $self->equalTo('ASC')
                 );
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('enabled' => true)));
             })
             ->getPager(array('enabled' => true), 1);
     }
@@ -83,43 +91,30 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getUserManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('u')));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('u.enabled = :enabled'));
+                $qb->expects($self->once())->method('setParameter')->with(
+                    $self->equalTo('enabled'),
+                    $self->equalTo(false)
+                );
                 $qb->expects($self->once())->method('orderBy')->with(
                     $self->equalTo('u.username'),
                     $self->equalTo('ASC')
                 );
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('enabled' => false)));
             })
             ->getPager(array('enabled' => false), 1);
     }
 
-    public function testGetPagerWithLockedUsers()
+    protected function getUserManager($qbCallback)
     {
-        $self = $this;
-        $this
-            ->getUserManager(function ($qb) use ($self) {
-                $qb->expects($self->once())->method('andWhere')->with($self->equalTo('u.locked = :locked'));
-                $qb->expects($self->once())->method('orderBy')->with(
-                    $self->equalTo('u.username'),
-                    $self->equalTo('ASC')
-                );
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('locked' => true)));
-            })
-            ->getPager(array('locked' => true), 1);
-    }
+        $om = EntityManagerMockFactory::create($this, $qbCallback, array(
+            'username',
+            'email',
+        ));
 
-    public function testGetPagerWithNonLockedUsers()
-    {
-        $self = $this;
-        $this
-            ->getUserManager(function ($qb) use ($self) {
-                $qb->expects($self->once())->method('andWhere')->with($self->equalTo('u.locked = :locked'));
-                $qb->expects($self->once())->method('orderBy')->with(
-                    $self->equalTo('u.username'),
-                    $self->equalTo('ASC')
-                );
-                $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('locked' => false)));
-            })
-            ->getPager(array('locked' => false), 1);
+        $passwordUpdater = $this->createMock('FOS\UserBundle\Util\PasswordUpdaterInterface');
+        $canonical = $this->createMock('FOS\UserBundle\Util\CanonicalFieldsUpdater');
+
+        return new UserManager($passwordUpdater, $canonical, $om, 'Sonata\UserBundle\Entity\BaseUser');
     }
 }

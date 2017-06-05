@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -11,14 +11,10 @@
 
 namespace Sonata\UserBundle\Document;
 
-use FOS\UserBundle\Document\GroupManager as BaseGroupManager;
-use Sonata\DatagridBundle\Pager\PagerInterface;
+use FOS\UserBundle\Doctrine\GroupManager as BaseGroupManager;
 use Sonata\UserBundle\Model\GroupManagerInterface;
 
 /**
- * Class GroupManager.
- *
- *
  * @author Hugo Briand <briand@ekino.com>
  */
 class GroupManager extends BaseGroupManager implements GroupManagerInterface
@@ -32,12 +28,7 @@ class GroupManager extends BaseGroupManager implements GroupManagerInterface
     }
 
     /**
-     * @param array $criteria
-     * @param int   $page
-     * @param int   $limit
-     * @param array $sort
-     *
-     * @return PagerInterface
+     * {@inheritdoc}
      */
     public function getPager(array $criteria, $page, $limit = 10, array $sort = array())
     {

@@ -1,13 +1,12 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
  */
 
 namespace Sonata\UserBundle\Form\Type;
@@ -84,6 +83,8 @@ class SecurityRolesType extends AbstractType
     /**
      * {@inheritdoc}
      *
+     * NEXT_MAJOR: remove this method.
+     *
      * @deprecated Remove it when bumping requirements to Symfony 2.7+
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -100,7 +101,7 @@ class SecurityRolesType extends AbstractType
 
         $resolver->setDefaults(array(
             'choices' => function (Options $options, $parentChoices) use ($roles) {
-                return empty($parentChoices) ? $roles : array();
+                return empty($parentChoices) ? array_flip($roles) : array();
             },
 
             'read_only_choices' => function (Options $options) use ($rolesReadOnly) {
@@ -116,10 +117,7 @@ class SecurityRolesType extends AbstractType
      */
     public function getParent()
     {
-        return
-            method_exists('Symfony\Component\Form\FormTypeInterface', 'setDefaultOptions') ?
-                'choice' : // support for symfony < 2.8.0
-                'Symfony\Component\Form\Extension\Core\Type\ChoiceType';
+        return 'Symfony\Component\Form\Extension\Core\Type\ChoiceType';
     }
 
     /**

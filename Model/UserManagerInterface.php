@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -15,9 +15,6 @@ use FOS\UserBundle\Model\UserManagerInterface as BaseInterface;
 use Sonata\CoreBundle\Model\PageableManagerInterface;
 
 /**
- * Class UserManagerInterface.
- *
- *
  * @author Hugo Briand <briand@ekino.com>
  */
 interface UserManagerInterface extends BaseInterface, PageableManagerInterface

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -11,12 +11,12 @@
 
 namespace Sonata\UserBundle\Admin\Model;
 
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
-class GroupAdmin extends Admin
+class GroupAdmin extends AbstractAdmin
 {
     /**
      * {@inheritdoc}
@@ -61,6 +61,11 @@ class GroupAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        // NEXT_MAJOR: Keep FQCN when bumping Symfony requirement to 2.8+.
+        $securityRolesType = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+            ? 'Sonata\UserBundle\Form\Type\SecurityRolesType'
+            : 'sonata_security_roles';
+
         $formMapper
             ->tab('Group')
                 ->with('General', array('class' => 'col-md-6'))
@@ -69,7 +74,7 @@ class GroupAdmin extends Admin
             ->end()
             ->tab('Security')
                 ->with('Roles', array('class' => 'col-md-12'))
-                    ->add('roles', 'sonata_security_roles', array(
+                    ->add('roles', $securityRolesType, array(
                         'expanded' => true,
                         'multiple' => true,
                         'required' => false,

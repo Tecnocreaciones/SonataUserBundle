@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -14,31 +14,14 @@ namespace Sonata\UserBundle\Tests\Entity;
 use Sonata\CoreBundle\Test\EntityManagerMockFactory;
 use Sonata\UserBundle\Entity\GroupManager;
 
-/**
- * Class GroupManagerTest.
- */
 class GroupManagerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @param $qbCallback
-     *
-     * @return GroupManager
-     */
-    protected function getUserManager($qbCallback)
-    {
-        $em = EntityManagerMockFactory::create($this, $qbCallback, array(
-            'name',
-            'roles',
-        ));
-
-        return new GroupManager($em, 'Sonata\UserBundle\Entity\BaseGroup');
-    }
-
     public function testGetPager()
     {
         $self = $this;
         $this
             ->getUserManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('g')));
                 $qb->expects($self->never())->method('andWhere');
                 $qb->expects($self->once())->method('orderBy')->with(
                     $self->equalTo('g.name'),
@@ -50,7 +33,7 @@ class GroupManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        RuntimeException
+     * @expectedException        \RuntimeException
      * @expectedExceptionMessage Invalid sort field 'invalid' in 'className' class
      */
     public function testGetPagerWithInvalidSort()
@@ -70,6 +53,7 @@ class GroupManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getUserManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('g')));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('g.enabled = :enabled'));
                 $qb->expects($self->once())->method('orderBy')->with(
                     $self->equalTo('g.name'),
@@ -85,6 +69,7 @@ class GroupManagerTest extends \PHPUnit_Framework_TestCase
         $self = $this;
         $this
             ->getUserManager(function ($qb) use ($self) {
+                $qb->expects($self->once())->method('getRootAliases')->will($self->returnValue(array('g')));
                 $qb->expects($self->once())->method('andWhere')->with($self->equalTo('g.enabled = :enabled'));
                 $qb->expects($self->once())->method('orderBy')->with(
                     $self->equalTo('g.name'),
@@ -93,5 +78,20 @@ class GroupManagerTest extends \PHPUnit_Framework_TestCase
                 $qb->expects($self->once())->method('setParameters')->with($self->equalTo(array('enabled' => false)));
             })
             ->getPager(array('enabled' => false), 1);
+    }
+
+    /**
+     * @param $qbCallback
+     *
+     * @return GroupManager
+     */
+    protected function getUserManager($qbCallback)
+    {
+        $em = EntityManagerMockFactory::create($this, $qbCallback, array(
+            'name',
+            'roles',
+        ));
+
+        return new GroupManager($em, 'Sonata\UserBundle\Entity\BaseGroup');
     }
 }

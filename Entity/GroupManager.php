@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -11,15 +11,12 @@
 
 namespace Sonata\UserBundle\Entity;
 
-use FOS\UserBundle\Entity\GroupManager as BaseGroupManager;
+use FOS\UserBundle\Doctrine\GroupManager as BaseGroupManager;
 use Sonata\DatagridBundle\Pager\Doctrine\Pager;
 use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
 use Sonata\UserBundle\Model\GroupManagerInterface;
 
 /**
- * Class GroupManager.
- *
- *
  * @author Hugo Briand <briand@ekino.com>
  */
 class GroupManager extends BaseGroupManager implements GroupManagerInterface

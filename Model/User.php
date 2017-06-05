@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -11,7 +11,7 @@
 
 namespace Sonata\UserBundle\Model;
 
-use FOS\UserBundle\Entity\User as AbstractedUser;
+use FOS\UserBundle\Model\User as AbstractedUser;
 
 /**
  * Represents a User model.
@@ -129,88 +129,6 @@ abstract class User extends AbstractedUser implements UserInterface
     protected $token;
 
     /**
-     * Sets the creation date.
-     *
-     * @param \DateTime|null $createdAt
-     *
-     * @return User
-     */
-    public function setCreatedAt(\DateTime $createdAt = null)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Returns the creation date.
-     *
-     * @return \DateTime|null
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Sets the last update date.
-     *
-     * @param \DateTime|null $updatedAt
-     *
-     * @return User
-     */
-    public function setUpdatedAt(\DateTime $updatedAt = null)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Returns the last update date.
-     *
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Returns the expiration date.
-     *
-     * @return \DateTime|null
-     */
-    public function getExpiresAt()
-    {
-        return $this->expiresAt;
-    }
-
-    /**
-     * Returns the credentials expiration date.
-     *
-     * @return \DateTime
-     */
-    public function getCredentialsExpireAt()
-    {
-        return $this->credentialsExpireAt;
-    }
-
-    /**
-     * Sets the credentials expiration date.
-     *
-     * @param \DateTime|null $date
-     *
-     * @return User
-     */
-    public function setCredentialsExpireAt(\DateTime $date = null)
-    {
-        $this->credentialsExpireAt = $date;
-
-        return $this;
-    }
-
-    /**
      * Returns a string representation.
      *
      * @return string
@@ -221,11 +139,43 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * Sets the user groups.
-     *
-     * @param array $groups
-     *
-     * @return User
+     * {@inheritdoc}
+     */
+    public function setCreatedAt(\DateTime $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUpdatedAt(\DateTime $updatedAt = null)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function setGroups($groups)
     {
@@ -237,11 +187,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * Sets the two-step verification code.
-     *
-     * @param string $twoStepVerificationCode
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setTwoStepVerificationCode($twoStepVerificationCode)
     {
@@ -251,9 +197,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * Returns the two-step verification code.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTwoStepVerificationCode()
     {
@@ -261,9 +205,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $biography
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setBiography($biography)
     {
@@ -273,7 +215,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getBiography()
     {
@@ -281,9 +223,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param \DateTime $dateOfBirth
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setDateOfBirth($dateOfBirth)
     {
@@ -293,7 +233,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return \DateTime
+     * {@inheritdoc}
      */
     public function getDateOfBirth()
     {
@@ -301,9 +241,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $facebookData
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setFacebookData($facebookData)
     {
@@ -313,7 +251,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getFacebookData()
     {
@@ -321,9 +259,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $facebookName
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setFacebookName($facebookName)
     {
@@ -333,7 +269,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getFacebookName()
     {
@@ -341,9 +277,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $facebookUid
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setFacebookUid($facebookUid)
     {
@@ -353,7 +287,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getFacebookUid()
     {
@@ -361,9 +295,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $firstname
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setFirstname($firstname)
     {
@@ -373,7 +305,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getFirstname()
     {
@@ -381,9 +313,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $gender
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setGender($gender)
     {
@@ -393,7 +323,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getGender()
     {
@@ -401,9 +331,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $gplusData
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setGplusData($gplusData)
     {
@@ -413,7 +341,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getGplusData()
     {
@@ -421,9 +349,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $gplusName
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setGplusName($gplusName)
     {
@@ -433,7 +359,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getGplusName()
     {
@@ -441,9 +367,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $gplusUid
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setGplusUid($gplusUid)
     {
@@ -453,7 +377,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getGplusUid()
     {
@@ -461,9 +385,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $lastname
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setLastname($lastname)
     {
@@ -473,7 +395,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getLastname()
     {
@@ -481,9 +403,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $locale
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setLocale($locale)
     {
@@ -493,7 +413,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getLocale()
     {
@@ -501,9 +421,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $phone
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setPhone($phone)
     {
@@ -513,7 +431,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getPhone()
     {
@@ -521,9 +439,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $timezone
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setTimezone($timezone)
     {
@@ -533,7 +449,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getTimezone()
     {
@@ -541,9 +457,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $twitterData
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setTwitterData($twitterData)
     {
@@ -553,7 +467,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getTwitterData()
     {
@@ -561,9 +475,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $twitterName
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setTwitterName($twitterName)
     {
@@ -573,7 +485,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getTwitterName()
     {
@@ -581,9 +493,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $twitterUid
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setTwitterUid($twitterUid)
     {
@@ -593,7 +503,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getTwitterUid()
     {
@@ -601,9 +511,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $website
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setWebsite($website)
     {
@@ -613,7 +521,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getWebsite()
     {
@@ -621,9 +529,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param string $token
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setToken($token)
     {
@@ -633,7 +539,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getToken()
     {
@@ -641,7 +547,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getFullname()
     {
@@ -649,7 +555,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getRealRoles()
     {
@@ -657,9 +563,7 @@ abstract class User extends AbstractedUser implements UserInterface
     }
 
     /**
-     * @param array $roles
-     *
-     * @return User
+     * {@inheritdoc}
      */
     public function setRealRoles(array $roles)
     {

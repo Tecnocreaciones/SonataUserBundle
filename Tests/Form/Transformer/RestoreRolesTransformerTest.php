@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -16,7 +16,7 @@ use Sonata\UserBundle\Form\Transformer\RestoreRolesTransformer;
 class RestoreRolesTransformerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testInvalidStateTransform()
     {
@@ -29,7 +29,7 @@ class RestoreRolesTransformerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testInvalidStateReverseTransform()
     {
@@ -108,11 +108,11 @@ class RestoreRolesTransformerTest extends \PHPUnit_Framework_TestCase
                             ->getMock();
 
         $availableRoles = array(
-            'ROLE_SONATA_ADMIN'               => 'ROLE_SONATA_ADMIN',
+            'ROLE_SONATA_ADMIN' => 'ROLE_SONATA_ADMIN',
             'ROLE_COMPANY_PERSONAL_MODERATOR' => 'ROLE_COMPANY_PERSONAL_MODERATOR: ROLE_COMPANY_USER',
-            'ROLE_COMPANY_NEWS_MODERATOR'     => 'ROLE_COMPANY_NEWS_MODERATOR: ROLE_COMPANY_USER',
-            'ROLE_COMPANY_BOOKKEEPER'         => 'ROLE_COMPANY_BOOKKEEPER: ROLE_COMPANY_USER',
-            'ROLE_USER'                       => 'ROLE_USER',
+            'ROLE_COMPANY_NEWS_MODERATOR' => 'ROLE_COMPANY_NEWS_MODERATOR: ROLE_COMPANY_USER',
+            'ROLE_COMPANY_BOOKKEEPER' => 'ROLE_COMPANY_BOOKKEEPER: ROLE_COMPANY_USER',
+            'ROLE_USER' => 'ROLE_USER',
         );
         $roleBuilder->expects($this->once())->method('getRoles')->will($this->returnValue(array($availableRoles, array())));
 
@@ -135,8 +135,8 @@ class RestoreRolesTransformerTest extends \PHPUnit_Framework_TestCase
                             ->getMock();
 
         $availableRoles = array(
-            'ROLE_SONATA_ADMIN'  => 'ROLE_SONATA_ADMIN',
-            'ROLE_ADMIN'         => 'ROLE_ADMIN: ROLE_USER ROLE_COMPANY_ADMIN',
+            'ROLE_SONATA_ADMIN' => 'ROLE_SONATA_ADMIN',
+            'ROLE_ADMIN' => 'ROLE_ADMIN: ROLE_USER ROLE_COMPANY_ADMIN',
         );
         $roleBuilder->expects($this->once())->method('getRoles')->will($this->returnValue(array($availableRoles, array())));
 

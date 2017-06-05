@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -12,8 +12,9 @@
 namespace Sonata\UserBundle\Tests\Document;
 
 use Sonata\UserBundle\Document\BaseUser;
+use Sonata\UserBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class BaseUserTest extends \PHPUnit_Framework_TestCase
+class BaseUserTest extends PHPUnit_Framework_TestCase
 {
     public function testDateSetters()
     {
@@ -24,7 +25,6 @@ class BaseUserTest extends \PHPUnit_Framework_TestCase
         // When
         $user->setCreatedAt($today);
         $user->setUpdatedAt($today);
-        $user->setCredentialsExpireAt($today);
 
         // Then
         $this->assertTrue($user->getCreatedAt() instanceof \DateTime, 'Should return a DateTime object');
@@ -32,9 +32,6 @@ class BaseUserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($user->getUpdatedAt() instanceof \DateTime, 'Should return a DateTime object');
         $this->assertEquals($today->format('U'), $user->getUpdatedAt()->format('U'), 'Should contain today\'s date');
-
-        $this->assertTrue($user->getCredentialsExpireAt() instanceof \DateTime, 'Should return a DateTime object');
-        $this->assertEquals($today->format('U'), $user->getCredentialsExpireAt()->format('U'), 'Should contain today\'s date');
     }
 
     public function testDateWithPrePersist()
@@ -76,9 +73,9 @@ class BaseUserTest extends \PHPUnit_Framework_TestCase
     {
         // Given
         $user = new BaseUser();
-        $group1 = $this->getMock('FOS\UserBundle\Model\GroupInterface');
+        $group1 = $this->createMock('FOS\UserBundle\Model\GroupInterface');
         $group1->expects($this->any())->method('getName')->will($this->returnValue('Group 1'));
-        $group2 = $this->getMock('FOS\UserBundle\Model\GroupInterface');
+        $group2 = $this->createMock('FOS\UserBundle\Model\GroupInterface');
         $group2->expects($this->any())->method('getName')->will($this->returnValue('Group 2'));
 
         // When

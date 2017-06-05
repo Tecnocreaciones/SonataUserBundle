@@ -1,57 +1,73 @@
-CHANGELOG
-=========
+# Change Log
+All notable changes to this project will be documented in this file.
+This project adheres to [Semantic Versioning](http://semver.org/).
 
-### [BC BREAK] 2014-02-25
+## [3.2.3](https://github.com/sonata-project/SonataUserBundle/compare/3.2.2...3.2.3) - 2017-03-16
+### Fixed
+- Fix non-use of container for has/get services.
 
-* Refactored ``SonataUserBundle:Security:login.html.twig`` template to add twig blocks and change layout.
-* Added a registration form handling solution (configuration has changed as well but default values are present).
+## [3.2.2](https://github.com/sonata-project/SonataUserBundle/compare/3.2.1...3.2.2) - 2017-03-08
+### Fixed
+- Fixed empty route after registration
+- Added missing throw in change password process
+- Avoid deprecation message by using request_stack when it is present
+- Avoid deprecation message by changing CSRF token generation when possible
+- Wrong factory definition
 
-### [BC BREAK] 2014-01-21
+### Removed
+- Removed form types non FQCN on SF2.8+
+- Removed deprecations about form factory on SF2.8
 
-* Refactored ``SonataUserBundle:Security:login.html.twig`` & ``SonataUserBundle:Block:account.html.twig`` templates to replace {% render controller(...) %} calls by {% render url(...) %} calls.
-* Added routing files to fully override FOSUser routing & controllers.
-* Added controllers to fullyu override FOSUser controllers.
-* Those overrides are optionnal, see documentation to see which routing files use depending on your usage.
+## [3.2.1](https://github.com/sonata-project/SonataUserBundle/compare/3.2.0...3.2.1) - 2017-02-09
+### Added
+- Add missing (optional) dependency for JMSSerializerBundle, needed for the services defined in serializer.xml and api_form.xml
 
-### [BC BREAK] 2014-01-06
+### Fixed
+- FOSRestBundle 2.x was improved
+- fixed a cross dependency when using UserBundle with FOSRestBundle and NelmioApiDocBundle depending JMSSerializerBundle.
+- add missing use for DependencyInjection\Reference
+- Added $ sign that was missing from a previous refactoring
+- `asset` return `/` if default avatar is empty
+- Declaration of `UserManagerProxy` uses `Sonata\UserBundle\Entity\User` instead of `%fos_user.model.user.class%`
+- the bundle can be used without a `sonata.user.editable_role_builder` service
+- Issue where service was injected to constructor at wrong position
+- Missing italian translations
+- Deprecation of `security.context` on `AdminSecurityController`
 
-* Refactored ``SonataUserBundle:Security:login.html.twig`` & ``SonataUserBundle:Block:account.html.twig`` templates to add Bootstrap3 classes support.
+## [3.2.0](https://github.com/sonata-project/SonataUserBundle/compare/3.1.0...3.2.0) - 2016-11-25
+### Added
+- Added russian and ukrainian translations
 
-### [BC BREAK] 2013-10-16
+### Deprecated
+- Relying on the `sonata_basket_delivery_redirect` is deprecated and won't be supported anymore
 
-* Refactored SonataUserBundle:Profile:edit_authentication.html.twig & SonataUserBundle:Profile:edit_profile.html.twig templates
-    Those templates are now embedding the profile menu block and extending base action.html.twig template.
+### Fixed
+- The reset password url now points to the action dedicated to administrators again
 
-    You'll need to add the following to the sonata_block configuration:
+### Removed
+- The conflict rule for FOSRestBundle `>=2.0`
 
-    sonata_block:
-        blocks:
-            sonata.user.block.menu:
+## [3.1.0](https://github.com/sonata-project/SonataUserBundle/compare/3.0.1...3.1.0) - 2016-10-14
+### Changed
+- The `friendsofsymfony/rest-bundle` dependency is optional again
+- The `jms/serializer-bundle` dependency is optional again
+- The `nelmio/api-doc-bundle` dependency is optional again
+- Changed implementation of `SecurityFOSUser1Controller::loginAction`
+- Changed implementation of `AdminSecurityController::loginAction`
+- Changed how the error message is translated in `login.html.twig`
+- Changed how the error message is translated in `base_login.html.twig`
 
+### Fixed
+- Fixed a potential null error in `SecurityFOSUser1Controller::loginAction`
+- Fixed a potential empty route after calling `RegistrationFOSUser1Controller::registerAction`
+- Fixed wrong route name "sonata_user_admin_resetting_request", replaced with "sonata_user_resetting_request"
+- Symfony 3 security classes use in `AdminSecurityController`
+- Fixed a possible security risk as noticed in this [line](https://github.com/sonata-project/SonataUserBundle/blob/88a962818dd6218379ff1439183a15647837bda0/Controller/AdminSecurityController.php#L40)
 
-### [BC BREAK] 2013-05-06
+### Removed
+- Internal test classes are now excluded from the autoloader
+- Removed translation for 'Bad credentials' message in `SonataUserBundle.de.xliff`
 
-* User's groups roles are not merged anymore when editing `User` entity. A `getRealRoles()` method has been
-  added in `Sonata\UserBundle\Model\User` and is now used in `Sonata\UserBundle\Admin\UserAdmin`.
-
-  If you still want to merge user's groups roles, you can:
-
-     * add a `getRealRoles()` in your entity by overriding `Sonata\UserBundle\Model\User` method and
-       referencing `getRoles()` parent method
-
-### 2012-09-24
-
-* changed service parameters into options that come through the configuration with the old values as the new defaults.
-
-### [BC BREAK] 2012-07-21
-
-* change impersonating definition, now the url is defined as a configuration, you don't need to create
-  a custom route anymore.
-
-     * remove ``sonata_user_impersonating`` from the routing file
-     * add ``impersonating_route`` into the ``sonata_user`` configuration section
-
-### 2012-06-08
-
-* Introduce new field for user: firstname, lastname, gender, etc ...
-* add frontend edition of profile information
+## [3.0.1](https://github.com/sonata-project/SonataUserBundle/compare/3.0.0...3.0.1) - 2016-05-20
+### Changed
+- Admin classes extend `Sonata\AdminBundle\Admin\AbstractAdmin`

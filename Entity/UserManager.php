@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -15,12 +15,10 @@ use FOS\UserBundle\Doctrine\UserManager as BaseUserManager;
 use Sonata\CoreBundle\Model\ManagerInterface;
 use Sonata\DatagridBundle\Pager\Doctrine\Pager;
 use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
+use Sonata\UserBundle\Model\UserInterface;
 use Sonata\UserBundle\Model\UserManagerInterface;
 
 /**
- * Class UserManager.
- *
- *
  * @author Hugo Briand <briand@ekino.com>
  */
 class UserManager extends BaseUserManager implements UserManagerInterface, ManagerInterface
@@ -30,7 +28,7 @@ class UserManager extends BaseUserManager implements UserManagerInterface, Manag
      */
     public function findUsersBy(array $criteria = null, array $orderBy = null, $limit = null, $offset = null)
     {
-        return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+        return $this->getRepository()->findBy($criteria, $orderBy, $limit, $offset);
     }
 
     /**
@@ -38,7 +36,7 @@ class UserManager extends BaseUserManager implements UserManagerInterface, Manag
      */
     public function find($id)
     {
-        return $this->repository->find($id);
+        return $this->getRepository()->find($id);
     }
 
     /**
@@ -46,7 +44,7 @@ class UserManager extends BaseUserManager implements UserManagerInterface, Manag
      */
     public function findAll()
     {
-        return $this->repository->findAll();
+        return $this->getRepository()->findAll();
     }
 
     /**
@@ -54,7 +52,7 @@ class UserManager extends BaseUserManager implements UserManagerInterface, Manag
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        return parent::findUsers($criteria, $orderBy, $limit, $offset);
+        return $this->getRepository()->findBy($criteria, $orderBy, $limit, $offset);
     }
 
     /**
@@ -78,6 +76,10 @@ class UserManager extends BaseUserManager implements UserManagerInterface, Manag
      */
     public function save($entity, $andFlush = true)
     {
+        if (!$entity instanceof UserInterface) {
+            throw new \InvalidArgumentException('Save method expected entity of type UserInterface');
+        }
+
         parent::updateUser($entity, $andFlush);
     }
 
@@ -86,6 +88,10 @@ class UserManager extends BaseUserManager implements UserManagerInterface, Manag
      */
     public function delete($entity, $andFlush = true)
     {
+        if (!$entity instanceof UserInterface) {
+            throw new \InvalidArgumentException('Save method expected entity of type UserInterface');
+        }
+
         parent::deleteUser($entity);
     }
 
@@ -94,7 +100,7 @@ class UserManager extends BaseUserManager implements UserManagerInterface, Manag
      */
     public function getTableName()
     {
-        return $this->objectManager->getClassMetadata($this->class)->table['name'];
+        return $this->objectManager->getClassMetadata($this->getClass())->table['name'];
     }
 
     /**
@@ -110,14 +116,14 @@ class UserManager extends BaseUserManager implements UserManagerInterface, Manag
      */
     public function getPager(array $criteria, $page, $limit = 10, array $sort = array())
     {
-        $query = $this->repository
+        $query = $this->getRepository()
             ->createQueryBuilder('u')
             ->select('u');
 
-        $fields = $this->objectManager->getClassMetadata($this->class)->getFieldNames();
+        $fields = $this->objectManager->getClassMetadata($this->getClass())->getFieldNames();
         foreach ($sort as $field => $direction) {
             if (!in_array($field, $fields)) {
-                throw new \RuntimeException(sprintf("Invalid sort field '%s' in '%s' class", $field, $this->class));
+                throw new \RuntimeException(sprintf("Invalid sort field '%s' in '%s' class", $field, $this->getClass()));
             }
         }
         if (count($sort) == 0) {
@@ -127,19 +133,10 @@ class UserManager extends BaseUserManager implements UserManagerInterface, Manag
             $query->orderBy(sprintf('u.%s', $field), strtoupper($direction));
         }
 
-        $parameters = array();
-
         if (isset($criteria['enabled'])) {
             $query->andWhere('u.enabled = :enabled');
-            $parameters['enabled'] = $criteria['enabled'];
+            $query->setParameter('enabled', $criteria['enabled']);
         }
-
-        if (isset($criteria['locked'])) {
-            $query->andWhere('u.locked = :locked');
-            $parameters['locked'] = $criteria['locked'];
-        }
-
-        $query->setParameters($parameters);
 
         $pager = new Pager();
         $pager->setMaxPerPage($limit);

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -9,26 +9,25 @@
  * file that was distributed with this source code.
  */
 
-namespace Sonata\Test\UserBundle\Controller\Api;
+namespace Sonata\UserBundle\Tests\Controller\Api;
 
 use Sonata\UserBundle\Controller\Api\UserController;
+use Sonata\UserBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class UserControllerTest.
- *
- *
  * @author Hugo Briand <briand@ekino.com>
  */
-class UserControllerTest extends \PHPUnit_Framework_TestCase
+class UserControllerTest extends PHPUnit_Framework_TestCase
 {
     public function testGetUsersAction()
     {
-        $user        = $this->getMock('Sonata\UserBundle\Model\UserInterface');
-        $userManager = $this->getMock('Sonata\UserBundle\Model\UserManagerInterface');
+        $userManager = $this->createMock('Sonata\UserBundle\Model\UserManagerInterface');
         $userManager->expects($this->once())->method('getPager')->will($this->returnValue(array()));
 
-        $paramFetcher = $this->getMock('FOS\RestBundle\Request\ParamFetcherInterface');
+        $paramFetcher = $this->getMockBuilder('FOS\RestBundle\Request\ParamFetcher')
+            ->disableOriginalConstructor()
+            ->getMock();
         $paramFetcher->expects($this->exactly(3))->method('get');
         $paramFetcher->expects($this->once())->method('all')->will($this->returnValue(array()));
 
@@ -37,7 +36,7 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUserAction()
     {
-        $user = $this->getMock('Sonata\UserBundle\Model\UserInterface');
+        $user = $this->createMock('Sonata\UserBundle\Model\UserInterface');
         $this->assertEquals($user, $this->createUserController($user)->getUserAction(1));
     }
 
@@ -52,17 +51,17 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testPostUserAction()
     {
-        $user = $this->getMock('FOS\UserBundle\Model\UserInterface');
+        $user = $this->createMock('FOS\UserBundle\Model\UserInterface');
 
-        $userManager = $this->getMock('Sonata\UserBundle\Model\UserManagerInterface');
+        $userManager = $this->createMock('Sonata\UserBundle\Model\UserManagerInterface');
         $userManager->expects($this->once())->method('updateUser')->will($this->returnValue($user));
 
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
-        $form->expects($this->once())->method('submit');
+        $form->expects($this->once())->method('handleRequest');
         $form->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $form->expects($this->once())->method('getData')->will($this->returnValue($user));
 
-        $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         $formFactory->expects($this->once())->method('createNamed')->will($this->returnValue($form));
 
         $view = $this->createUserController(null, $userManager, null, $formFactory)->postUserAction(new Request());
@@ -72,13 +71,13 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testPostUserInvalidAction()
     {
-        $userManager = $this->getMock('Sonata\UserBundle\Model\UserManagerInterface');
+        $userManager = $this->createMock('Sonata\UserBundle\Model\UserManagerInterface');
 
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
-        $form->expects($this->once())->method('submit');
+        $form->expects($this->once())->method('handleRequest');
         $form->expects($this->once())->method('isValid')->will($this->returnValue(false));
 
-        $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         $formFactory->expects($this->once())->method('createNamed')->will($this->returnValue($form));
 
         $view = $this->createUserController(null, $userManager, null, $formFactory)->postUserAction(new Request());
@@ -88,18 +87,18 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testPutUserAction()
     {
-        $user = $this->getMock('FOS\UserBundle\Model\UserInterface');
+        $user = $this->createMock('FOS\UserBundle\Model\UserInterface');
 
-        $userManager = $this->getMock('Sonata\UserBundle\Model\UserManagerInterface');
+        $userManager = $this->createMock('Sonata\UserBundle\Model\UserManagerInterface');
         $userManager->expects($this->once())->method('findUserBy')->will($this->returnValue($user));
         $userManager->expects($this->once())->method('updateUser')->will($this->returnValue($user));
 
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
-        $form->expects($this->once())->method('submit');
+        $form->expects($this->once())->method('handleRequest');
         $form->expects($this->once())->method('isValid')->will($this->returnValue(true));
         $form->expects($this->once())->method('getData')->will($this->returnValue($user));
 
-        $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         $formFactory->expects($this->once())->method('createNamed')->will($this->returnValue($form));
 
         $view = $this->createUserController($user, $userManager, null, $formFactory)->putUserAction(1, new Request());
@@ -109,16 +108,16 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testPutUserInvalidAction()
     {
-        $user = $this->getMock('FOS\UserBundle\Model\UserInterface');
+        $user = $this->createMock('FOS\UserBundle\Model\UserInterface');
 
-        $userManager = $this->getMock('Sonata\UserBundle\Model\UserManagerInterface');
+        $userManager = $this->createMock('Sonata\UserBundle\Model\UserManagerInterface');
         $userManager->expects($this->once())->method('findUserBy')->will($this->returnValue($user));
 
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')->disableOriginalConstructor()->getMock();
-        $form->expects($this->once())->method('submit');
+        $form->expects($this->once())->method('handleRequest');
         $form->expects($this->once())->method('isValid')->will($this->returnValue(false));
 
-        $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         $formFactory->expects($this->once())->method('createNamed')->will($this->returnValue($form));
 
         $view = $this->createUserController($user, $userManager, null, $formFactory)->putUserAction(1, new Request());
@@ -128,16 +127,16 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testPostUserGroupAction()
     {
-        $user = $this->getMock('Sonata\UserBundle\Entity\BaseUser');
+        $user = $this->createMock('Sonata\UserBundle\Entity\BaseUser');
         $user->expects($this->once())->method('hasGroup')->will($this->returnValue(false));
 
-        $group = $this->getMock('FOS\UserBundle\Model\GroupInterface');
+        $group = $this->createMock('FOS\UserBundle\Model\GroupInterface');
 
-        $userManager = $this->getMock('Sonata\UserBundle\Model\UserManagerInterface');
+        $userManager = $this->createMock('Sonata\UserBundle\Model\UserManagerInterface');
         $userManager->expects($this->once())->method('findUserBy')->will($this->returnValue($user));
         $userManager->expects($this->once())->method('updateUser')->will($this->returnValue($user));
 
-        $groupManager = $this->getMock('Sonata\UserBundle\Model\GroupManagerInterface');
+        $groupManager = $this->createMock('Sonata\UserBundle\Model\GroupManagerInterface');
         $groupManager->expects($this->once())->method('findGroupBy')->will($this->returnValue($group));
 
         $view = $this->createUserController($user, $userManager, $groupManager)->postUserGroupAction(1, 1);
@@ -147,15 +146,15 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testPostUserGroupInvalidAction()
     {
-        $user = $this->getMock('Sonata\UserBundle\Entity\BaseUser');
+        $user = $this->createMock('Sonata\UserBundle\Entity\BaseUser');
         $user->expects($this->once())->method('hasGroup')->will($this->returnValue(true));
 
-        $group = $this->getMock('FOS\UserBundle\Model\GroupInterface');
+        $group = $this->createMock('FOS\UserBundle\Model\GroupInterface');
 
-        $userManager = $this->getMock('Sonata\UserBundle\Model\UserManagerInterface');
+        $userManager = $this->createMock('Sonata\UserBundle\Model\UserManagerInterface');
         $userManager->expects($this->once())->method('findUserBy')->will($this->returnValue($user));
 
-        $groupManager = $this->getMock('Sonata\UserBundle\Model\GroupManagerInterface');
+        $groupManager = $this->createMock('Sonata\UserBundle\Model\GroupManagerInterface');
         $groupManager->expects($this->once())->method('findGroupBy')->will($this->returnValue($group));
 
         $view = $this->createUserController($user, $userManager, $groupManager)->postUserGroupAction(1, 1);
@@ -170,16 +169,16 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteUserGroupAction()
     {
-        $user = $this->getMock('Sonata\UserBundle\Entity\BaseUser');
+        $user = $this->createMock('Sonata\UserBundle\Entity\BaseUser');
         $user->expects($this->once())->method('hasGroup')->will($this->returnValue(true));
 
-        $group = $this->getMock('FOS\UserBundle\Model\GroupInterface');
+        $group = $this->createMock('FOS\UserBundle\Model\GroupInterface');
 
-        $userManager = $this->getMock('Sonata\UserBundle\Model\UserManagerInterface');
+        $userManager = $this->createMock('Sonata\UserBundle\Model\UserManagerInterface');
         $userManager->expects($this->once())->method('findUserBy')->will($this->returnValue($user));
         $userManager->expects($this->once())->method('updateUser')->will($this->returnValue($user));
 
-        $groupManager = $this->getMock('Sonata\UserBundle\Model\GroupManagerInterface');
+        $groupManager = $this->createMock('Sonata\UserBundle\Model\GroupManagerInterface');
         $groupManager->expects($this->once())->method('findGroupBy')->will($this->returnValue($group));
 
         $view = $this->createUserController($user, $userManager, $groupManager)->deleteUserGroupAction(1, 1);
@@ -189,15 +188,15 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteUserGroupInvalidAction()
     {
-        $user = $this->getMock('Sonata\UserBundle\Entity\BaseUser');
+        $user = $this->createMock('Sonata\UserBundle\Entity\BaseUser');
         $user->expects($this->once())->method('hasGroup')->will($this->returnValue(false));
 
-        $group = $this->getMock('FOS\UserBundle\Model\GroupInterface');
+        $group = $this->createMock('FOS\UserBundle\Model\GroupInterface');
 
-        $userManager = $this->getMock('Sonata\UserBundle\Model\UserManagerInterface');
+        $userManager = $this->createMock('Sonata\UserBundle\Model\UserManagerInterface');
         $userManager->expects($this->once())->method('findUserBy')->will($this->returnValue($user));
 
-        $groupManager = $this->getMock('Sonata\UserBundle\Model\GroupManagerInterface');
+        $groupManager = $this->createMock('Sonata\UserBundle\Model\GroupManagerInterface');
         $groupManager->expects($this->once())->method('findGroupBy')->will($this->returnValue($group));
 
         $view = $this->createUserController($user, $userManager, $groupManager)->deleteUserGroupAction(1, 1);
@@ -212,9 +211,9 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteUserAction()
     {
-        $user = $this->getMock('FOS\UserBundle\Model\UserInterface');
+        $user = $this->createMock('FOS\UserBundle\Model\UserInterface');
 
-        $userManager = $this->getMock('Sonata\UserBundle\Model\UserManagerInterface');
+        $userManager = $this->createMock('Sonata\UserBundle\Model\UserManagerInterface');
         $userManager->expects($this->once())->method('findUserBy')->will($this->returnValue($user));
         $userManager->expects($this->once())->method('deleteUser')->will($this->returnValue($user));
 
@@ -227,7 +226,7 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
 
-        $userManager = $this->getMock('Sonata\UserBundle\Model\UserManagerInterface');
+        $userManager = $this->createMock('Sonata\UserBundle\Model\UserManagerInterface');
         $userManager->expects($this->once())->method('findUserBy')->will($this->returnValue(null));
         $userManager->expects($this->never())->method('deleteUser');
 
@@ -245,16 +244,16 @@ class UserControllerTest extends \PHPUnit_Framework_TestCase
     public function createUserController($user = null, $userManager = null, $groupManager = null, $formFactory = null)
     {
         if (null === $userManager) {
-            $userManager = $this->getMock('Sonata\UserBundle\Model\UserManagerInterface');
+            $userManager = $this->createMock('Sonata\UserBundle\Model\UserManagerInterface');
         }
         if (null === $groupManager) {
-            $groupManager = $this->getMock('Sonata\UserBundle\Model\GroupManagerInterface');
+            $groupManager = $this->createMock('Sonata\UserBundle\Model\GroupManagerInterface');
         }
         if (null !== $user) {
             $userManager->expects($this->once())->method('findUserBy')->will($this->returnValue($user));
         }
         if (null === $formFactory) {
-            $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+            $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         }
 
         return new UserController($userManager, $groupManager, $formFactory);
